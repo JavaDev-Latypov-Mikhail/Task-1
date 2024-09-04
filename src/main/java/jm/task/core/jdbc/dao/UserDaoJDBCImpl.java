@@ -62,42 +62,53 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (var connection = Util.get();
-             var preparedStatement = connection.prepareStatement(SAVE_USER_SQL)) {
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, lastName);
-            preparedStatement.setByte(3, age);
-            preparedStatement.executeUpdate();
-            connection.commit();
+        try (var connection = Util.get()) {
+            connection.setAutoCommit(false);
+            try (var preparedStatement = connection.prepareStatement(SAVE_USER_SQL)) {
+                preparedStatement.setString(1, name);
+                preparedStatement.setString(2, lastName);
+                preparedStatement.setByte(3, age);
+                preparedStatement.executeUpdate();
+                connection.commit();
+                System.out.println("User с именем – " + name + " добавлен в базу данных");
+            } catch (SQLException e) {
+                connection.rollback();
+                System.err.println("Error saving user: " + e.getMessage());
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Connection error: " + e.getMessage());
         }
     }
 
+
     public void removeUserById(long id) {
-        try (var connection = Util.get();
-             var preparedStatement = connection.prepareStatement(REMOVE_USER_BY_ID_SQL)) {
-            preparedStatement.setLong(1, id);
-            preparedStatement.executeUpdate();
-            connection.commit();
+        try (var connection = Util.get()) {
+            connection.setAutoCommit(false);
+            try (var preparedStatement = connection.prepareStatement(REMOVE_USER_BY_ID_SQL)) {
+                preparedStatement.setLong(1, id);
+                preparedStatement.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback();
+                e.printStackTrace();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
         try (var connection = Util.get();
-             var preparedStatement = connection.prepareStatement(GET_ALL_USERS_SQL)) {
-            var resultSet = preparedStatement.executeQuery();
-            List<User> users = new ArrayList<>();
+             var preparedStatement = connection.prepareStatement(GET_ALL_USERS_SQL);
+             var resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 users.add(buildUser(resultSet));
             }
-            return users;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error retrieving users: " + e.getMessage());
         }
-        return null;
+        return users;
     }
 
     public void cleanUsersTable() {
@@ -114,12 +125,17 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     private void executeUpdate(String query) {
-        try (var connection = Util.get();
-             var statement = connection.createStatement()) {
-            statement.executeUpdate(query);
-            connection.commit();
+        try (var connection = Util.get()) {
+            connection.setAutoCommit(false);
+            try (var statement = connection.createStatement()) {
+                statement.executeUpdate(query);
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback();
+                System.err.println("Error executing update: " + e.getMessage());
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Connection error: " + e.getMessage());
         }
     }
 }
