@@ -184,3 +184,9 @@ $RECYCLE.BIN/
 *.lnk
 
 /src/main/resources/application.properties
+/.idea/compiler.xml
+/.idea/vcs.xml
+/.idea/misc.xml
+/.idea/jarRepositories.xml
+/.idea/dataSources.xml
+/.idea/.gitignore
