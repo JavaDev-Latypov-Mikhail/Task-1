@@ -118,6 +118,8 @@ fabric.properties
 
 # Log file
 *.log
+log4j.xml
+
 
 # BlueJ files
 *.ctxt

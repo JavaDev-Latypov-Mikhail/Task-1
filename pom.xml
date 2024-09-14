@@ -21,19 +21,32 @@
     </build>
 
     <dependencies>
-<!--         Ваши зависимости-->
-         <!-- https://mvnrepository.com/artifact/junit/junit -->
-         <dependency>
-             <groupId>junit</groupId>
-             <artifactId>junit</artifactId>
-             <version>4.13.2</version>
-             <scope>test</scope>
-         </dependency>
+        <!--         Ваши зависимости-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>2.24.0</version>
+            <scope>test</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.3</version> <!-- Убедитесь, что версия актуальна -->
+            <version>42.7.3</version>
         </dependency>
 
         <dependency>
@@ -47,6 +60,6 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.6.3.Final</version>
         </dependency>
-     </dependencies>
+    </dependencies>
 
 </project>
