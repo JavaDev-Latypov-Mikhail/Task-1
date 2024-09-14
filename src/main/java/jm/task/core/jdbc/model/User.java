@@ -18,6 +18,7 @@ public class User {
     @Column
     private Byte age;
 
+
     public User() {
 
     }
@@ -26,6 +27,11 @@ public class User {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
+    }
+
+    public User(long id, String name, String lastName, byte age) {
+        this(name, lastName, age);
+        this.id = id;
     }
 
     public Long getId() {
@@ -58,5 +64,15 @@ public class User {
 
     public void setAge(Byte age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", lastName='" + lastName + '\'' +
+               ", age=" + age +
+               '}';
     }
 }
